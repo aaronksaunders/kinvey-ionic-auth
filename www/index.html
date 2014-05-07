@@ -7,7 +7,6 @@
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
@@ -18,6 +17,8 @@
 
     <script src="https://da189i1jfloii.cloudfront.net/js/kinvey-angular-1.1.4.min.js"></script>
 
+    <script src="lib/flow/ng-flow-standalone.js"></script>
+
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -26,7 +27,7 @@
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
 </head>
-<body ng-app="starter" animation="slide-left-right-ios7">
+<body ng-app="starter" animation="slide-left-right-ios7" flow-init >
 <!--
   The nav bar that will be updated as we navigate between views.
 -->

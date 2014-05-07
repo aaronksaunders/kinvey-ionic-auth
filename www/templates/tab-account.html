@@ -1,5 +1,31 @@
-<ion-view title="Account">
-  <ion-content class="has-header padding">
-    <h1>Account</h1>
-  </ion-content>
+
+
+<ion-view title="Account" >
+    <ion-content class="has-header padding">
+        <h1>Image Upload Test</h1>
+
+        <div class="container">
+            <h1>flow image example</h1>
+            <hr class="soften"/>
+
+            <div>
+                <div class="thumbnail" ng-hide="$flow.files.length">
+                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
+                </div>
+                <div class="thumbnail" ng-show="$flow.files.length">
+                    <img class="thumbnail" flow-img="$flow.files[0]" />
+                </div>
+                <div>
+                    <button ng-hide="$flow.files.length" flow-btn flow-attrs="{accept:'image/*'}">Select image</button>
+                    <button ng-show="$flow.files.length" flow-btn flow-attrs="{accept:'image/*'}">Change</button>
+                    <button class="btn btn-danger" ng-show="$flow.files.length"
+                       ng-click="$flow.cancel()">
+                        Remove
+                    </button>
+                </div>
+                <p>
+                    Only PNG,GIF,JPG files allowed.
+                </p>
+            </div>
+    </ion-content>
 </ion-view>

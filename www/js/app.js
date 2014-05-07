@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'kinvey', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'kinvey', 'starter.controllers', 'starter.services', 'flow'])
 
     .run(['$ionicPlatform', '$kinvey', '$rootScope', '$state', function ($ionicPlatform, $kinvey, $rootScope, $state) {
 
@@ -42,7 +42,7 @@ angular.module('starter', ['ionic', 'kinvey', 'starter.controllers', 'starter.se
         });
     }])
 
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, flowFactoryProvider) {
 
         // Ionic uses AngularUI Router which uses the concept of states
         // Learn more here: https://github.com/angular-ui/ui-router
@@ -109,6 +109,16 @@ angular.module('starter', ['ionic', 'kinvey', 'starter.controllers', 'starter.se
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise("/sign-in");
 
+
+        flowFactoryProvider.defaults = {
+            testChunks : false,
+            singleFile: true
+        };
+        flowFactoryProvider.on('catchAll', function (event) {
+            console.log('catchAll', JSON.stringify(event));
+        });
+        // Can be used with different implementations of Flow.js
+        // flowFactoryProvider.factory = fustyFlowFactory;
     });
 
 
@@ -116,9 +126,11 @@ angular.module('starter', ['ionic', 'kinvey', 'starter.controllers', 'starter.se
 function determineBehavior($kinvey, $state, $rootScope) {
     var activeUser = $kinvey.getActiveUser();
     console.log("$state: " + $state);
-    debugger;
-    if ( (activeUser === null)) {
+    console.log("activeUser: " + JSON.stringify(activeUser));
+    if ((activeUser === null)) {
         $state.go('signin');
+    } else if ($state.current.name === 'signin') {
+        $state.go('tab.dash');
     }
 }
 
