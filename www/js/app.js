@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'kinvey', 'starter.controllers', 'starter.services', 'flow'])
 
-    .run(['$ionicPlatform', '$kinvey', '$rootScope', '$state', function ($ionicPlatform, $kinvey, $rootScope, $state) {
+    .run(['$ionicPlatform', '$kinvey', '$rootScope', '$state','UserService', function ($ionicPlatform, $kinvey, $rootScope, $state, UserService) {
 
         console.log($ionicPlatform);
 
@@ -25,19 +25,19 @@ angular.module('starter', ['ionic', 'kinvey', 'starter.controllers', 'starter.se
             promise.then(function () {
                 // Kinvey initialization finished with success
                 console.log("Kinvey init with success");
-                determineBehavior($kinvey, $state, $rootScope);
+                determineBehavior($kinvey, $state, $rootScope,UserService);
 
                 // setup the stateChange listener
                 $rootScope.$on("$stateChangeStart", function (event, toState /*, toParams, fromState, fromParams*/) {
                     if (toState.name !== 'signin') {
-                        determineBehavior($kinvey, $state, $rootScope);
+                        determineBehavior($kinvey, $state, $rootScope,UserService);
                     }
                 });
 
             }, function (errorCallback) {
                 // Kinvey initialization finished with error
                 console.log("Kinvey init with error: " + JSON.stringify(errorCallback));
-                determineBehavior($kinvey, $state, $rootScope);
+                determineBehavior($kinvey, $state, $rootScope,UserService);
             });
         });
     }])
@@ -123,13 +123,13 @@ angular.module('starter', ['ionic', 'kinvey', 'starter.controllers', 'starter.se
 
 
 //function selects the desired behavior depending on whether the user is logged or not
-function determineBehavior($kinvey, $state, $rootScope) {
-    var activeUser = $kinvey.getActiveUser();
+function determineBehavior($kinvey, $state, $rootScope, UserService) {
+    var activeUser = UserService.activeUser();
     console.log("$state: " + $state);
-    console.log("activeUser: " + JSON.stringify(activeUser));
+    console.log("activeUser: " + JSON.stringify(activeUser,null,2));
     if ((activeUser === null)) {
         $state.go('signin');
-    } else if ($state.current.name === 'signin') {
+    } else if (($state.current.name === 'signin') && (activeUser !== null)) {
         $state.go('tab.dash');
     }
 }

@@ -29,18 +29,12 @@ angular.module('starter.controllers', [])
         $scope.friend = Friends.get($stateParams.friendId);
     })
     .controller('SignInCtrl',
-    ['$scope', '$kinvey', "$state", function ($scope, $kinvey, $state) {
+    ['$scope', '$kinvey', "$state", function ($scope, $kinvey, $state, UserService) {
 
         $scope.signIn = function (user) {
             console.log('Sign-In', user);
 
-            //Kinvey login starts
-            var promise = $kinvey.User.login({
-                username: user.username,
-                password: user.password
-            });
-            promise.then(
-                function (response) {
+            UserService.login(user.username, user.password).then(function (response) {
                     //Kinvey login finished with success
                     $scope.submittedError = false;
                     $state.go('tab.dash');
@@ -57,7 +51,16 @@ angular.module('starter.controllers', [])
 
     }])
     .controller('AccountCtrl',
-    ['$scope', '$kinvey', "$state", function ($scope, $kinvey, $state) {
+    ['$scope', '$kinvey', "$state", "AvatarService", function ($scope, $kinvey, $state, AvatarService) {
+
+
+        AvatarService.get('b613fde4-7e33-4170-a1a3-817b36ef115f').then(function (_r) {
+            console.log(_r);
+        })
+
+        AvatarService.find().then(function (_r) {
+            console.log(_r);
+        })
 
         // flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
         // flow-files-submitted="$flow.upload()"
@@ -79,20 +82,13 @@ angular.module('starter.controllers', [])
              */
             console.log(JSON.stringify(flowFile[0].file));
 
-            // create the kinvey file object
-            var promise = $kinvey.File.upload(flowFile[0].file,{
-                _filename: flowFile[0].file.name,
-                public: true,
-                size: flowFile[0].file.size,
-                mimeType: flowFile[0].file.type
-            }).then(function (_result) {
+
+            AvatarService.upload(flowFile[0]).then(function (_result) {
                 console.log("$upload: " + JSON.stringify(_result));
                 //file.cancel()
             }, function error(err) {
                 console.log('[$upload] received error: ' + JSON.stringify(err));
             });
-
-            return promise;
 
         });
     }]);
