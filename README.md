@@ -15,3 +15,4 @@ using custom SCSS. This is based on the Kinvey Sign- In App
 
 See Kinvey documentation for setting up Kinvey Account
 
+The demo currently integrates basic authentication with Kinvey and shows how on could implement Models & Services in an AngularJS way within the application
